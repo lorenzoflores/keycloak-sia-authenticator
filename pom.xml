@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>sescam</groupId>
+	<artifactId>sia-keycloak-authenticator</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<keycloak.version>21.0.0</keycloak.version>
+		<lombok.version>1.18.26</lombok.version>
+		<slf4j.version>1.7.30</slf4j.version>
+		<maven.compiler.version>3.10.1</maven.compiler.version>
+		<maven.compiler.release>11</maven.compiler.release>
+		<maven-shade.version>3.2.4</maven-shade.version>
+		<maven-surefire.version>3.0.0-M9</maven-surefire.version>
+	</properties>
+
+	<!-- Dependencias de la extensión de Keycloak -->
+	<dependencies>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-core</artifactId>
+			<version>${keycloak.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-server-spi</artifactId>
+			<version>${keycloak.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-server-spi-private</artifactId>
+			<version>${keycloak.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-services</artifactId>
+			<version>${keycloak.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- SIA -->
+		<dependency>
+			<groupId>com.openlandsw</groupId>
+			<artifactId>siaval-base</artifactId>
+			<version>6.9.01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.openlandsw.rss</groupId>
+			<artifactId>gateway-api</artifactId>
+			<version>2.4.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.openlandsw.tspcryptoclient</groupId>
+			<artifactId>hessian-integration-platform</artifactId>
+			<version>6.9.01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.openlandsw.tspcryptoclient</groupId>
+			<artifactId>ws-integration-platform</artifactId>
+			<version>6.9.01</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.openlandsw.tspstandalone</groupId>
+			<artifactId>tsp-stand-alone</artifactId>
+			<version>7.0.00</version>
+		</dependency>
+
+		<!-- BouncyCastle -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.38</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk16</artifactId>
+			<version>1.38</version>
+		</dependency>
+
+		<!-- Hessian -->
+
+
+		<dependency>
+			<groupId>com.caucho_adapted</groupId>
+			<artifactId>hessian</artifactId>
+			<version>3.2.0</version>
+			<classifier>adapted</classifier>
+		</dependency>
+	</dependencies>
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>${maven-shade.version}</version>
+					<configuration>
+						<artifactSet>
+							<excludes>
+								<exclude>org.keycloak*</exclude>
+								<exclude>org.apache*</exclude>
+								<exclude>org.projectlombok*</exclude>
+								<exclude>org.slf4j*</exclude>
+							</excludes>
+							<includes>
+								<include>com.openlandsw*</include>
+								<include>org.bouncycastle*</include>
+								<include>com.caucho*</include>
+							</includes>
+
+						</artifactSet>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<finalName>${project.groupId}-${project.artifactId}</finalName>
+	</build>
+
+
+</project>
